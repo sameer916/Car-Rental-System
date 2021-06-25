@@ -1,0 +1,485 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CarRentalDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="tbl_Admin">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdminName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="300" />
+          <Property Name="PhoneNumber" Type="bigint" Nullable="false" />
+          <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Car">
+          <Key>
+            <PropertyRef Name="CarId" />
+          </Key>
+          <Property Name="CarId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CarName" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="CarType" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="DefaultPrice" Type="float" Nullable="false" />
+          <Property Name="OwnerId" Type="int" Nullable="false" />
+          <Property Name="AdminId" Type="int" Nullable="false" />
+          <Property Name="RentalId" Type="int" Nullable="false" />
+          <Property Name="IsAvailable" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CustomerName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="PhoneNumber" Type="bigint" Nullable="false" />
+          <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="RentalId" Type="int" Nullable="false" />
+          <Property Name="AdminId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Owner">
+          <Key>
+            <PropertyRef Name="OwnerId" />
+          </Key>
+          <Property Name="OwnerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OwnerName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="PhoneNumber" Type="bigint" Nullable="false" />
+          <Property Name="EmailId" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AdminId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tbl_Rental">
+          <Key>
+            <PropertyRef Name="RentalId" />
+          </Key>
+          <Property Name="RentalId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PickupDate" Type="datetime" Nullable="false" />
+          <Property Name="ReturnDate" Type="datetime" Nullable="false" />
+          <Property Name="Source" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Destination" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="FairAmount" Type="float" Nullable="false" />
+          <Property Name="InitialFuel" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="AdminId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Car" Type="Self.tbl_Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Car">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId">
+          <End Role="tbl_Owner" Type="Self.tbl_Owner" Multiplicity="1" />
+          <End Role="tbl_Car" Type="Self.tbl_Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Owner">
+              <PropertyRef Name="OwnerId" />
+            </Principal>
+            <Dependent Role="tbl_Car">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId">
+          <End Role="tbl_Rental" Type="Self.tbl_Rental" Multiplicity="1" />
+          <End Role="tbl_Car" Type="Self.tbl_Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Rental">
+              <PropertyRef Name="RentalId" />
+            </Principal>
+            <Dependent Role="tbl_Car">
+              <PropertyRef Name="RentalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Customer" Type="Self.tbl_Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Customer">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId">
+          <End Role="tbl_Rental" Type="Self.tbl_Rental" Multiplicity="1" />
+          <End Role="tbl_Customer" Type="Self.tbl_Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Rental">
+              <PropertyRef Name="RentalId" />
+            </Principal>
+            <Dependent Role="tbl_Customer">
+              <PropertyRef Name="RentalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Owner" Type="Self.tbl_Owner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Owner">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Rental" Type="Self.tbl_Rental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Rental">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarRentalDBModelStoreContainer">
+          <EntitySet Name="tbl_Admin" EntityType="Self.tbl_Admin" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Car" EntityType="Self.tbl_Car" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Customer" EntityType="Self.tbl_Customer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Owner" EntityType="Self.tbl_Owner" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tbl_Rental" EntityType="Self.tbl_Rental" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Car" EntitySet="tbl_Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId" Association="Self.FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId">
+            <End Role="tbl_Owner" EntitySet="tbl_Owner" />
+            <End Role="tbl_Car" EntitySet="tbl_Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId" Association="Self.FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId">
+            <End Role="tbl_Rental" EntitySet="tbl_Rental" />
+            <End Role="tbl_Car" EntitySet="tbl_Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Customer" EntitySet="tbl_Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId" Association="Self.FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId">
+            <End Role="tbl_Rental" EntitySet="tbl_Rental" />
+            <End Role="tbl_Customer" EntitySet="tbl_Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Owner" EntitySet="tbl_Owner" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Rental" EntitySet="tbl_Rental" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CarRentalDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="tbl_Admin">
+          <Key>
+            <PropertyRef Name="AdminId" />
+          </Key>
+          <Property Name="AdminId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdminName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="Int64" Nullable="false" />
+          <Property Name="EmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="tbl_Car" Relationship="Self.FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId" FromRole="tbl_Admin" ToRole="tbl_Car" />
+          <NavigationProperty Name="tbl_Customer" Relationship="Self.FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId" FromRole="tbl_Admin" ToRole="tbl_Customer" />
+          <NavigationProperty Name="tbl_Owner" Relationship="Self.FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId" FromRole="tbl_Admin" ToRole="tbl_Owner" />
+          <NavigationProperty Name="tbl_Rental" Relationship="Self.FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId" FromRole="tbl_Admin" ToRole="tbl_Rental" />
+        </EntityType>
+        <EntityType Name="tbl_Car">
+          <Key>
+            <PropertyRef Name="CarId" />
+          </Key>
+          <Property Name="CarId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CarName" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CarType" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DefaultPrice" Type="Double" Nullable="false" />
+          <Property Name="OwnerId" Type="Int32" Nullable="false" />
+          <Property Name="AdminId" Type="Int32" Nullable="false" />
+          <Property Name="RentalId" Type="Int32" Nullable="false" />
+          <Property Name="IsAvailable" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="tbl_Admin" Relationship="Self.FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId" FromRole="tbl_Car" ToRole="tbl_Admin" />
+          <NavigationProperty Name="tbl_Owner" Relationship="Self.FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId" FromRole="tbl_Car" ToRole="tbl_Owner" />
+          <NavigationProperty Name="tbl_Rental" Relationship="Self.FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId" FromRole="tbl_Car" ToRole="tbl_Rental" />
+        </EntityType>
+        <EntityType Name="tbl_Customer">
+          <Key>
+            <PropertyRef Name="CustomerId" />
+          </Key>
+          <Property Name="CustomerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CustomerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="Int64" Nullable="false" />
+          <Property Name="EmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="RentalId" Type="Int32" Nullable="false" />
+          <Property Name="AdminId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Admin" Relationship="Self.FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId" FromRole="tbl_Customer" ToRole="tbl_Admin" />
+          <NavigationProperty Name="tbl_Rental" Relationship="Self.FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId" FromRole="tbl_Customer" ToRole="tbl_Rental" />
+        </EntityType>
+        <EntityType Name="tbl_Owner">
+          <Key>
+            <PropertyRef Name="OwnerId" />
+          </Key>
+          <Property Name="OwnerId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OwnerName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Address" Type="String" MaxLength="300" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PhoneNumber" Type="Int64" Nullable="false" />
+          <Property Name="EmailId" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Password" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdminId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Admin" Relationship="Self.FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId" FromRole="tbl_Owner" ToRole="tbl_Admin" />
+          <NavigationProperty Name="tbl_Car" Relationship="Self.FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId" FromRole="tbl_Owner" ToRole="tbl_Car" />
+        </EntityType>
+        <EntityType Name="tbl_Rental">
+          <Key>
+            <PropertyRef Name="RentalId" />
+          </Key>
+          <Property Name="RentalId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PickupDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReturnDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Source" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Destination" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="FairAmount" Type="Double" Nullable="false" />
+          <Property Name="InitialFuel" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AdminId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="tbl_Admin" Relationship="Self.FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId" FromRole="tbl_Rental" ToRole="tbl_Admin" />
+          <NavigationProperty Name="tbl_Car" Relationship="Self.FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId" FromRole="tbl_Rental" ToRole="tbl_Car" />
+          <NavigationProperty Name="tbl_Customer" Relationship="Self.FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId" FromRole="tbl_Rental" ToRole="tbl_Customer" />
+        </EntityType>
+        <Association Name="FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Car" Type="Self.tbl_Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Car">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Customer" Type="Self.tbl_Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Customer">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Owner" Type="Self.tbl_Owner" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Owner">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId">
+          <End Role="tbl_Admin" Type="Self.tbl_Admin" Multiplicity="1" />
+          <End Role="tbl_Rental" Type="Self.tbl_Rental" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Admin">
+              <PropertyRef Name="AdminId" />
+            </Principal>
+            <Dependent Role="tbl_Rental">
+              <PropertyRef Name="AdminId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId">
+          <End Role="tbl_Owner" Type="Self.tbl_Owner" Multiplicity="1" />
+          <End Role="tbl_Car" Type="Self.tbl_Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Owner">
+              <PropertyRef Name="OwnerId" />
+            </Principal>
+            <Dependent Role="tbl_Car">
+              <PropertyRef Name="OwnerId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId">
+          <End Role="tbl_Rental" Type="Self.tbl_Rental" Multiplicity="1" />
+          <End Role="tbl_Car" Type="Self.tbl_Car" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Rental">
+              <PropertyRef Name="RentalId" />
+            </Principal>
+            <Dependent Role="tbl_Car">
+              <PropertyRef Name="RentalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId">
+          <End Role="tbl_Rental" Type="Self.tbl_Rental" Multiplicity="1" />
+          <End Role="tbl_Customer" Type="Self.tbl_Customer" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tbl_Rental">
+              <PropertyRef Name="RentalId" />
+            </Principal>
+            <Dependent Role="tbl_Customer">
+              <PropertyRef Name="RentalId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CarRentalDBEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="tbl_Admin" EntityType="Self.tbl_Admin" />
+          <EntitySet Name="tbl_Car" EntityType="Self.tbl_Car" />
+          <EntitySet Name="tbl_Customer" EntityType="Self.tbl_Customer" />
+          <EntitySet Name="tbl_Owner" EntityType="Self.tbl_Owner" />
+          <EntitySet Name="tbl_Rental" EntityType="Self.tbl_Rental" />
+          <AssociationSet Name="FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Car_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Car" EntitySet="tbl_Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Customer_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Customer" EntitySet="tbl_Customer" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Owner_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Owner" EntitySet="tbl_Owner" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId" Association="Self.FK_dbo_tbl_Rental_dbo_tbl_Admin_AdminId">
+            <End Role="tbl_Admin" EntitySet="tbl_Admin" />
+            <End Role="tbl_Rental" EntitySet="tbl_Rental" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId" Association="Self.FK_dbo_tbl_Car_dbo_tbl_Owner_OwnerId">
+            <End Role="tbl_Owner" EntitySet="tbl_Owner" />
+            <End Role="tbl_Car" EntitySet="tbl_Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId" Association="Self.FK_dbo_tbl_Car_dbo_tbl_Rental_CarRental_RentalId">
+            <End Role="tbl_Rental" EntitySet="tbl_Rental" />
+            <End Role="tbl_Car" EntitySet="tbl_Car" />
+          </AssociationSet>
+          <AssociationSet Name="FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId" Association="Self.FK_dbo_tbl_Customer_dbo_tbl_Rental_RentalId">
+            <End Role="tbl_Rental" EntitySet="tbl_Rental" />
+            <End Role="tbl_Customer" EntitySet="tbl_Customer" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CarRentalDBModelStoreContainer" CdmEntityContainer="CarRentalDBEntities">
+          <EntitySetMapping Name="tbl_Admin">
+            <EntityTypeMapping TypeName="CarRentalDBModel.tbl_Admin">
+              <MappingFragment StoreEntitySet="tbl_Admin">
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="AdminName" ColumnName="AdminName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Car">
+            <EntityTypeMapping TypeName="CarRentalDBModel.tbl_Car">
+              <MappingFragment StoreEntitySet="tbl_Car">
+                <ScalarProperty Name="CarId" ColumnName="CarId" />
+                <ScalarProperty Name="CarName" ColumnName="CarName" />
+                <ScalarProperty Name="CarType" ColumnName="CarType" />
+                <ScalarProperty Name="DefaultPrice" ColumnName="DefaultPrice" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+                <ScalarProperty Name="RentalId" ColumnName="RentalId" />
+                <ScalarProperty Name="IsAvailable" ColumnName="IsAvailable" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Customer">
+            <EntityTypeMapping TypeName="CarRentalDBModel.tbl_Customer">
+              <MappingFragment StoreEntitySet="tbl_Customer">
+                <ScalarProperty Name="CustomerId" ColumnName="CustomerId" />
+                <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="RentalId" ColumnName="RentalId" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Owner">
+            <EntityTypeMapping TypeName="CarRentalDBModel.tbl_Owner">
+              <MappingFragment StoreEntitySet="tbl_Owner">
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="EmailId" ColumnName="EmailId" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tbl_Rental">
+            <EntityTypeMapping TypeName="CarRentalDBModel.tbl_Rental">
+              <MappingFragment StoreEntitySet="tbl_Rental">
+                <ScalarProperty Name="RentalId" ColumnName="RentalId" />
+                <ScalarProperty Name="PickupDate" ColumnName="PickupDate" />
+                <ScalarProperty Name="ReturnDate" ColumnName="ReturnDate" />
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Destination" ColumnName="Destination" />
+                <ScalarProperty Name="FairAmount" ColumnName="FairAmount" />
+                <ScalarProperty Name="InitialFuel" ColumnName="InitialFuel" />
+                <ScalarProperty Name="AdminId" ColumnName="AdminId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
